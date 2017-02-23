@@ -15,6 +15,7 @@
         cont_y: 300
     };
     let opts = {};
+    let timer = null;
 
     class Tag {
         constructor(entity, x, y, max_x, max_y, min_x, min_y, speed, dx, dy) {
@@ -78,11 +79,19 @@
                     )
                 );
             }
-            setInterval(() => {
+            timer = setInterval(() => {
                 for (let i = 0; i < tags.length; i++) {
                     tags[i].update_pos();
                 }
             }, 5);
+        },
+        destroy: function(...args) {
+            if (timer != null) {
+                clearInterval(timer);
+                timer = null
+            } else {
+                $.error("No timer set yet.");
+            }
         },
         add: function(...args) {
             tags.push(
@@ -108,6 +117,7 @@
             }
         }
     };
+
     $.fn.kabeatte = function(method, ...args) {
         if (methods[method]) {
             return methods[method].apply(this, args);
